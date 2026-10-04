@@ -1,0 +1,9 @@
+<%# Turbo Stream partial — replaces <span id="pending-pill"> after approve/skip. %>
+<span id="pending-pill">
+  <% if pending_count.to_i > 0 %>
+    <span class="pending-pill">
+      <span class="pending-pill__dot"></span>
+      <%= pending_count %> pending
+    </span>
+  <% end %>
+</span>

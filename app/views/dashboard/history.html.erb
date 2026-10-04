@@ -1,0 +1,55 @@
+<% content_for :title, "History" %>
+
+<h1 class="page-title">Action history</h1>
+
+<% if @actions.empty? %>
+  <p style="color:var(--text-muted); font-size:15px;">
+    No completed actions yet. They'll appear here once you start approving or skipping.
+  </p>
+<% else %>
+  <div style="background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius-xl); overflow:hidden;">
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Discount</th>
+          <th>Revenue at risk</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @actions.each do |action| %>
+          <tr>
+            <td>
+              <div style="font-family:'Fraunces',serif; font-weight:600; font-size:15px;">
+                <%= action.customer.display_name %>
+              </div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                <%= action.customer.email %>
+              </div>
+            </td>
+            <td>
+              <span class="status-pill status-pill--<%= action.status %>">
+                <%= action.status %>
+              </span>
+            </td>
+            <td style="font-family:'Geist Mono',monospace; font-size:13px;">
+              <%= action.proposed_discount %>
+            </td>
+            <td style="font-family:'Geist Mono',monospace; font-size:13px; color:var(--accent);">
+              €<%= action.revenue_at_risk.round(0).to_i %>
+            </td>
+            <td style="font-size:13px; color:var(--text-muted);">
+              <%
+                ts = action.executed_at || action.approved_at ||
+                     action.skipped_at  || action.updated_at
+              %>
+              <%= ts.strftime("%-d %b %Y") %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

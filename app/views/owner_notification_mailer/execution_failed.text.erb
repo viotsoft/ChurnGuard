@@ -1,0 +1,24 @@
+ChurnGuard — Retention Action Failure Alert
+============================================
+
+⚠️  <%= @failed_count %> <%= @failed_count == 1 ? "retention action" : "retention actions" %> failed to send.
+
+ChurnGuard could not reach Klaviyo after multiple attempts. Your customers
+are still being monitored — no action was lost — but the discount campaigns
+were not delivered.
+
+WHAT HAPPENED
+-------------
+The connection between ChurnGuard and Klaviyo failed. This usually means your
+Klaviyo API key is missing, revoked, or your account has reached a plan limit.
+
+FIX IT NOW
+----------
+Check your Klaviyo settings: <%= @settings_url %>
+
+Once your Klaviyo connection is restored, new actions will send automatically.
+Reply to this email if you need help.
+
+——
+ChurnGuard · Automated retention for Shopify stores
+This alert was triggered for <%= @shop.shopify_domain %>.

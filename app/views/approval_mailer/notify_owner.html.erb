@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= @customer.display_name %> is at risk</title>
+  <!--[if mso]>
+  <noscript>
+    <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  </noscript>
+  <![endif]-->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap');
+    @media only screen and (max-width: 600px) {
+      .email-container { width: 100% !important; }
+      .mobile-padding { padding: 24px 16px !important; }
+      .customer-row td { display: block !important; width: 100% !important; }
+      .revenue-cell { text-align: left !important; padding-top: 0 !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#F5F0E8;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+
+  <!-- Outer wrapper -->
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#F5F0E8;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <!-- Email container: max 560px -->
+        <table role="presentation" class="email-container" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;width:100%;">
+
+          <!-- ── Header ─────────────────────────────── -->
+          <tr>
+            <td style="padding-bottom:24px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td>
+                    <span style="font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1A1410;letter-spacing:-0.02em;">ChurnGuard</span>
+                  </td>
+                  <td align="right">
+                    <span style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;color:#8A7E6F;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;">Retention Alert</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── Card ──────────────────────────────── -->
+          <tr>
+            <td>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                     style="background-color:#FDFAF4;border:1px solid #DDD5C8;border-radius:16px;overflow:hidden;">
+
+                <!-- Card body -->
+                <tr>
+                  <td class="mobile-padding" style="padding:32px;">
+
+                    <!-- Row 1: Customer name (left) + Revenue at risk (right) -->
+                    <!-- Revenue at risk is shown FIRST per DESIGN.md: "answers is this worth 3 seconds?" -->
+                    <table role="presentation" class="customer-row" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <td style="vertical-align:top;">
+                          <p style="margin:0;font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:30px;font-weight:600;color:#1A1410;line-height:1.1;letter-spacing:-0.02em;">
+                            <%= @customer.display_name %>
+                          </p>
+                        </td>
+                        <td class="revenue-cell" align="right" style="vertical-align:top;padding-left:16px;white-space:nowrap;">
+                          <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:22px;font-weight:700;color:#D4500A;line-height:1.2;">
+                            <%= @revenue_formatted %>
+                          </p>
+                          <p style="margin:2px 0 0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;color:#8A7E6F;text-align:right;letter-spacing:0.04em;text-transform:uppercase;">
+                            at risk
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Row 2: Customer metadata -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:12px;">
+                      <tr>
+                        <td>
+                          <p style="margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;color:#8A7E6F;line-height:1.5;">
+                            <% if @days_since_order %>
+                              Last ordered <strong style="color:#1A1410;"><%= @days_since_order %> days ago</strong>
+                              &nbsp;·&nbsp;
+                            <% end %>
+                            LTV&nbsp;<strong style="color:#1A1410;font-family:'Courier New',Courier,monospace;"><%= @revenue_formatted %></strong>
+                            &nbsp;·&nbsp;
+                            <% order_count = @customer.orders.paid.count %>
+                            <%= order_count %>&nbsp;<%= order_count == 1 ? "order" : "orders" %>
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Row 3: Risk badge -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
+                      <tr>
+                        <td>
+                          <% badge_bg, badge_color, badge_label = case @action.risk_tier
+                             when "high"   then ["#FAEAE0", "#C9400E", "HIGH RISK"]
+                             when "medium" then ["#FDF3D4", "#C28A10", "MEDIUM RISK"]
+                             else               ["#E0F0E8", "#3D7A5C", "LOW RISK"]
+                             end %>
+                          <span style="display:inline-block;padding:4px 10px;background-color:<%= badge_bg %>;border-radius:4px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;font-weight:600;color:<%= badge_color %>;letter-spacing:0.08em;text-transform:uppercase;">
+                            ● &nbsp;<%= badge_label %>
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Row 4: Risk reason (italic callout box) -->
+                    <% if @action.reason.present? %>
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:16px;">
+                        <tr>
+                          <td style="background-color:#F0EAE0;border-left:3px solid #FAE8DE;border-radius:0 8px 8px 0;padding:12px 16px;">
+                            <p style="margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;color:#6B5C4A;font-style:italic;line-height:1.5;">
+                              "<%= @action.reason %>"
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    <% end %>
+
+                    <!-- Row 5: Proposed action label -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
+                      <tr>
+                        <td>
+                          <p style="margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;font-weight:600;color:#B0A594;letter-spacing:0.08em;text-transform:uppercase;">
+                            Proposed Action
+                          </p>
+                          <p style="margin:4px 0 0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;color:#1A1410;font-weight:500;">
+                            Send <strong><%= @action.proposed_discount %> discount</strong> via Klaviyo campaign
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Divider -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:24px;">
+                      <tr>
+                        <td style="border-top:1px solid #EBE4DB;"></td>
+                      </tr>
+                    </table>
+
+                    <!-- Row 6: Primary CTA — Send Discount -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:24px;">
+                      <tr>
+                        <td align="center">
+                          <a href="<%= @approve_url %>"
+                             style="display:block;background-color:#D4500A;color:#ffffff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;text-decoration:none;text-align:center;padding:14px 24px;border-radius:8px;line-height:1.4;">
+                            ✓&nbsp;&nbsp;Send <%= @action.proposed_discount %> Discount to <%= @customer.display_name.split.first %>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Row 7: Ghost skip link -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:12px;">
+                      <tr>
+                        <td align="center">
+                          <a href="<%= @skip_url %>"
+                             style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;color:#8A7E6F;text-decoration:none;display:block;padding:8px;">
+                            Skip for now
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+
+                <!-- Card footer: reassurance text -->
+                <tr>
+                  <td style="background-color:#F0EAE0;border-top:1px solid #DDD5C8;padding:16px 32px;">
+                    <p style="margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;color:#8A7E6F;line-height:1.5;text-align:center;">
+                      This link expires in 72 hours · No login required · One-tap, then done
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── Footer ─────────────────────────────── -->
+          <tr>
+            <td style="padding-top:32px;padding-bottom:16px;">
+              <p style="margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;color:#B0A594;text-align:center;line-height:1.6;">
+                <strong style="color:#8A7E6F;">ChurnGuard</strong> · Automated retention for Shopify<br>
+                You received this because <%= @shop.shopify_domain %> has ChurnGuard installed.<br>
+                <a href="#" style="color:#B0A594;text-decoration:underline;">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

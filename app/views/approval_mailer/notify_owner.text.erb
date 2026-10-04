@@ -1,0 +1,31 @@
+ChurnGuard — Retention Alert
+============================
+
+<%= @customer.display_name %> is at risk
+Revenue at risk: <%= @revenue_formatted %>
+
+------------------------------------------------------------
+<% if @days_since_order %>
+Last ordered: <%= @days_since_order %> days ago
+<% end %>
+Orders: <%= @customer.orders.paid.count %>
+LTV: <%= @revenue_formatted %>
+Risk tier: <%= @action.risk_tier.upcase %>
+
+<%= @action.reason %>
+
+------------------------------------------------------------
+PROPOSED ACTION
+Send <%= @action.proposed_discount %> discount via Klaviyo campaign
+
+APPROVE — Send discount now (link expires in 72 hours):
+<%= @approve_url %>
+
+SKIP — Do nothing for now:
+<%= @skip_url %>
+
+------------------------------------------------------------
+This link expires in 72 hours. No login required.
+
+ChurnGuard · Automated retention for Shopify
+Sent because <%= @shop.shopify_domain %> has ChurnGuard installed.

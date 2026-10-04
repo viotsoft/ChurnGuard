@@ -1,0 +1,15 @@
+---
+# ChurnGuard Sidekiq queue configuration
+# Priority order: execution (highest) → notifications → scoring (lowest)
+# Approvals must NEVER wait behind scoring batch jobs.
+:concurrency: 5
+:queues:
+  - [execution, 10]      # Owner-approved Klaviyo actions — highest priority
+  - [notifications, 5]   # Owner notification emails (DLQ alerts, weekly digest)
+  - [analysis, 2]        # Isolated Data Lab CSV/ML runs
+  - [scoring, 1]         # Daily background scoring jobs — lowest priority
+
+:max_retries: 5          # After 5 retries → dead-letter queue
+
+:logging:
+  :level: info

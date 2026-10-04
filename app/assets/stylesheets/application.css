@@ -1,0 +1,309 @@
+:root {
+  --bg: #F5F0E8;
+  --surface: #FDFAF4;
+  --surface-2: #F0EAE0;
+  --text: #1A1410;
+  --text-muted: #8A7E6F;
+  --text-faint: #B0A594;
+  --accent: #D4500A;
+  --accent-hover: #B8400A;
+  --accent-light: #FAE8DE;
+  --success: #3D7A5C;
+  --border: #DDD5C8;
+  --border-soft: #EBE4DB;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+.marketing-page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.marketing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.marketing-logo {
+  color: var(--text);
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 21px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.marketing-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.marketing-nav__links a {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.marketing-nav__links a:hover {
+  color: var(--text);
+}
+
+.marketing-nav__links .marketing-nav__demo {
+  background: var(--accent);
+  border-radius: var(--radius-md);
+  color: #fff;
+  padding: 9px 14px;
+}
+
+.marketing-nav__links .marketing-nav__demo:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+.marketing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+  gap: 48px;
+  align-items: center;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 56px 24px 72px;
+}
+
+.marketing-eyebrow {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.marketing-hero h1,
+.marketing-section h2,
+.marketing-proof h2 {
+  color: var(--text);
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.04;
+  margin: 0;
+}
+
+.marketing-hero h1 {
+  font-size: 52px;
+  max-width: 610px;
+}
+
+.marketing-hero__lead {
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1.65;
+  margin: 22px 0 0;
+  max-width: 560px;
+}
+
+.marketing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.marketing-btn {
+  align-items: center;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  text-decoration: none;
+}
+
+.marketing-btn--primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.marketing-btn--primary:hover {
+  background: var(--accent-hover);
+}
+
+.marketing-btn--secondary {
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.marketing-btn--secondary:hover {
+  background: var(--surface-2);
+}
+
+.marketing-hero__visual {
+  margin: 0;
+}
+
+.marketing-hero__visual img {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 60px rgba(26, 20, 16, 0.12);
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.marketing-section,
+.marketing-proof {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+
+.marketing-section__intro {
+  max-width: 720px;
+  margin-bottom: 26px;
+}
+
+.marketing-section h2,
+.marketing-proof h2 {
+  font-size: 34px;
+}
+
+.marketing-steps,
+.marketing-roadmap {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.marketing-step,
+.marketing-roadmap > div {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+}
+
+.marketing-step span {
+  align-items: center;
+  background: var(--accent-light);
+  border-radius: var(--radius-full);
+  color: var(--accent);
+  display: inline-flex;
+  font-family: "Geist Mono", monospace;
+  font-size: 13px;
+  height: 28px;
+  justify-content: center;
+  margin-bottom: 18px;
+  width: 28px;
+}
+
+.marketing-step h3,
+.marketing-roadmap h3 {
+  color: var(--text);
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.marketing-step p,
+.marketing-roadmap p,
+.marketing-proof p {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.marketing-proof {
+  align-items: center;
+  display: grid;
+  gap: 36px;
+  grid-template-columns: minmax(0, 0.8fr) minmax(360px, 1fr);
+}
+
+.marketing-proof p {
+  margin-top: 14px;
+}
+
+.marketing-proof__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.marketing-proof__metrics div {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.marketing-proof__metrics strong {
+  color: var(--accent);
+  display: block;
+  font-family: "Geist Mono", monospace;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.marketing-proof__metrics span {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.marketing-pilot {
+  padding-bottom: 88px;
+}
+
+@media (max-width: 840px) {
+  .marketing-nav {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .marketing-nav__links {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .marketing-hero,
+  .marketing-proof {
+    grid-template-columns: 1fr;
+    padding-top: 36px;
+  }
+
+  .marketing-hero h1 {
+    font-size: 38px;
+  }
+
+  .marketing-steps,
+  .marketing-roadmap,
+  .marketing-proof__metrics {
+    grid-template-columns: 1fr;
+  }
+}

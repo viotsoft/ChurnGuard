@@ -1,0 +1,125 @@
+<%#
+  Partial: _action_card.html.erb
+  Locals: action (Action with customer preloaded)
+  Renders a pending approval card following DESIGN.md spec exactly:
+    1. Revenue at risk (Geist Mono, terracotta, TOP-RIGHT — shown FIRST)
+    2. Customer name (Fraunces 28px, top-left)
+    3. Customer metadata row (Instrument Sans 13px, muted)
+    4. Risk badge (traffic-light)
+    5. Risk reason (italic, surface-2 background)
+    6. Primary CTA: "Send Discount to [Name]" (full-width, terracotta)
+    7. Ghost skip button (full-width)
+  Card flip animation is handled by the approval-card Stimulus controller.
+%>
+<% customer = action.customer %>
+<% currency  = customer.orders.first&.currency || "EUR" %>
+<% symbol    = currency == "EUR" ? "€" : currency %>
+<% revenue   = "#{symbol}#{action.revenue_at_risk.round(0).to_i}" %>
+
+<div class="card-wrap" id="action_<%= action.id %>"
+     data-controller="approval-card">
+  <div class="action-card" data-approval-card-target="card">
+
+    <%# ── Card header ──────────────────────────────────────────────────────── %>
+    <div class="card-header">
+      <%# Customer name — Fraunces, top-left %>
+      <div>
+        <div class="customer-name"><%= customer.display_name %></div>
+        <div style="margin-top:6px;">
+          <span class="risk-badge risk-badge--<%= action.risk_tier %>">
+            <span class="risk-badge__dot"></span>
+            <%= action.risk_tier.upcase %> RISK
+          </span>
+        </div>
+      </div>
+
+      <%# Revenue at risk — Geist Mono, terracotta, FIRST (top-right) %>
+      <div class="revenue-at-risk">
+        <span class="revenue-at-risk__label">at risk</span>
+        <%= revenue %>
+      </div>
+    </div>
+
+    <%# ── Customer metadata ────────────────────────────────────────────────── %>
+    <div class="card-meta">
+      <% if customer.email.present? %>
+        <span class="card-meta__item">✉ <%= customer.email %></span>
+      <% end %>
+      <span class="card-meta__item">
+        LTV <%= symbol %><%= customer.lifetime_value.round(0).to_i %>
+      </span>
+      <span class="card-meta__item">
+        Proposed: <strong><%= action.proposed_discount %> off</strong>
+      </span>
+      <% if action.uplift_decision? %>
+        <span class="card-meta__item">
+          Uplift <strong>+<%= (action.uplift_score.to_f * 100).round(1) %>%</strong>
+        </span>
+      <% end %>
+    </div>
+
+    <%# ── Risk reason ──────────────────────────────────────────────────────── %>
+    <% if action.reason.present? %>
+      <div class="risk-reason"><%= action.reason %></div>
+    <% end %>
+
+    <% if action.uplift_decision? %>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;">
+        <div style="background:var(--surface-2);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:12px;">
+          <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">
+            Best action
+          </div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">
+            <%= action.treatment_label %>
+          </div>
+        </div>
+        <div style="background:var(--accent-light);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:12px;">
+          <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">
+            Incremental
+          </div>
+          <div style="font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;color:var(--accent);">
+            €<%= action.expected_incremental_revenue.to_f.round(0).to_i %> / <%= action.outcome_window_days || 30 %>d
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# ── Action buttons ───────────────────────────────────────────────────── %>
+    <div class="card-actions" data-approval-card-target="actions">
+      <%= button_to approve_action_path(action),
+            method: :patch,
+            data: {
+              "approval-card-target": "approveBtn",
+              "action": "approval-card#approve"
+            },
+            form: { "data-turbo": "true", "data-turbo-stream": "true" },
+            class: "btn-primary" do %>
+        <%= action.uplift_decision? ? "Approve #{action.treatment_label}" : "Send Discount to #{customer.first_name}" %> →
+      <% end %>
+
+      <%= button_to skip_action_path(action),
+            method: :patch,
+            data: {
+              "approval-card-target": "skipBtn",
+              "action": "approval-card#skip"
+            },
+            form: { "data-turbo": "true", "data-turbo-stream": "true" },
+            class: "btn-ghost" do %>
+        Skip for now
+      <% end %>
+    </div>
+
+    <%# ── Confirmation face (hidden until flip) ───────────────────────────── %>
+    <div data-approval-card-target="confirmation"
+         style="display:none; text-align:center; padding:24px 0;">
+      <div style="font-size:32px; margin-bottom:12px;" data-approval-card-target="confirmIcon">✓</div>
+      <div style="font-family:'Fraunces',serif; font-size:20px; font-weight:600; color:var(--text); margin-bottom:4px;">
+        <%= action.uplift_decision? ? "Action approved for #{customer.first_name}" : "Discount sent to #{customer.first_name}" %>
+      </div>
+      <div style="font-family:'Geist Mono',monospace; font-size:14px; color:var(--success);">
+        Est. recovery <%= action.uplift_decision? ? "€#{action.expected_incremental_revenue.to_f.round(0).to_i}" : revenue %>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,2 @@
+customer_id,order_id,ordered_at,amount,email,phone_number
+c-001,o-001,2025-01-10,49.90,owner@example.test,+10000000000

@@ -1,0 +1,4 @@
+shopify_customer_id,risk_score,risk_tier,lifetime_value,revenue_at_risk,proposed_discount,reason,model_version,scored_on
+1001,0.9210,high,420.50,387.28,15%,ML v2 predicts 92% churn risk: no order for 280 days after 2 purchases.,online-retail-ii-churn-v2,2011-12-09
+1002,0.7810,medium,180.00,140.58,10%,ML v2 flags early churn risk: 302 days since last order and 1 lifetime purchases.,online-retail-ii-churn-v2,2011-12-09
+1003,0.1200,low,95.00,11.40,,ML v2 sees low immediate churn risk: last order was 38 days ago.,online-retail-ii-churn-v2,2011-12-09

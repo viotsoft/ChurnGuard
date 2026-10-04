@@ -1,0 +1,81 @@
+<%# Charts LIVE HERE — not on the approval queue (DESIGN.md anti-pattern guard) %>
+<% content_for :title, "Insights" %>
+
+<h1 class="page-title">Retention insights</h1>
+
+<%# ── This month ──────────────────────────────────────────────────────────── %>
+<div style="margin-bottom:32px;">
+  <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">
+    This month
+  </div>
+  <div class="metrics-bar">
+    <div class="metric-chip">
+      <div class="metric-chip__label">Actions sent</div>
+      <div class="metric-chip__value"><%= @metrics[:actions_sent] %></div>
+    </div>
+    <div class="metric-chip">
+      <div class="metric-chip__label">Customers retained</div>
+      <div class="metric-chip__value"><%= @metrics[:customers_retained] %></div>
+    </div>
+    <div class="metric-chip">
+      <div class="metric-chip__label">Revenue recovered</div>
+      <div class="metric-chip__value metric-chip__value--accent">
+        €<%= number_with_delimiter(@metrics[:revenue_saved].round(0).to_i) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%# ── All time ─────────────────────────────────────────────────────────────── %>
+<div style="margin-bottom:32px;">
+  <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">
+    All time
+  </div>
+  <div class="metrics-bar">
+    <div class="metric-chip">
+      <div class="metric-chip__label">Total sent</div>
+      <div class="metric-chip__value"><%= @all_metrics[:total_sent] %></div>
+    </div>
+    <div class="metric-chip">
+      <div class="metric-chip__label">Total retained</div>
+      <div class="metric-chip__value"><%= @all_metrics[:total_retained] %></div>
+    </div>
+    <div class="metric-chip">
+      <div class="metric-chip__label">Total recovered</div>
+      <div class="metric-chip__value metric-chip__value--accent">
+        €<%= number_with_delimiter(@all_metrics[:total_revenue].round(0).to_i) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%# ── Action breakdown ────────────────────────────────────────────────────── %>
+<div style="background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius-xl);padding:24px;margin-bottom:32px;">
+  <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px;">Action breakdown</div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <% [
+      { label: "Executed",  key: :total_sent,      color: "var(--success)" },
+      { label: "Pending",   key: :pending_count,   color: "var(--accent)"  },
+      { label: "Skipped",   key: :skipped_count,   color: "var(--text-muted)" },
+      { label: "Expired",   key: :expired_count,   color: "var(--text-faint)" },
+      { label: "Failed",    key: :failed_count,    color: "var(--danger)"  }
+    ].each do |row| %>
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:14px;">
+        <span style="color:var(--text-muted);"><%= row[:label] %></span>
+        <span style="font-family:'Geist Mono',monospace;font-weight:500;color:<%= row[:color] %>;">
+          <%= @all_metrics[row[:key]] %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%# ── Retention rate context ─────────────────────────────────────────────── %>
+<div style="background:var(--surface-2);border-left:3px solid var(--accent-light);border-radius:0 var(--radius-lg) var(--radius-lg) 0;padding:16px 20px;">
+  <p style="font-size:13px;color:var(--text-muted);line-height:1.6;margin:0;">
+    <strong style="color:var(--text);">Industry benchmark:</strong>
+    E-commerce stores typically see 20–35% annual customer churn.
+    A 5% improvement in retention can increase revenue by 25–95%.
+    <em>(Bain &amp; Company, Harvard Business Review)</em>
+  </p>
+</div>

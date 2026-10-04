@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # Use Homebrew PostgreSQL 16 socket on macOS
+  host: <%= ENV.fetch("DB_HOST", "localhost") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+  username: <%= ENV.fetch("DB_USERNAME", ENV["USER"]) %>
+  password: <%= ENV.fetch("DB_PASSWORD", "") %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: churnguard_development
+
+test:
+  <<: *default
+  database: churnguard_test
+
+production:
+  <<: *default
+  database: churnguard_production
+  username: churnguard
+  password: <%= ENV["CHURNGUARD_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>

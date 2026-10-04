@@ -1,0 +1,60 @@
+<% content_for :title, @project.name %>
+
+<div class="eyebrow">Data Lab project</div>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+  <div><h1 class="title"><%= @project.name %></h1><p class="subtitle"><%= @project.mode.to_s.humanize %> · private results expire <%= @project.results_expires_at.to_date.to_fs(:long) %></p></div>
+  <span class="status status-<%= @project.status %>"><%= @project.status.humanize %></span>
+</div>
+
+<% if @project.status == "mapping_required" %>
+  <section class="panel"><div class="panel-title">Column mapping required</div><p class="subtitle">Confirm which CSV columns contain IDs, dates, amounts and experiment outcomes.</p><%= link_to "Map columns", mapping_lab_project_path(@project), class: "btn btn-primary" %></section>
+<% elsif @project.status == "ready" %>
+  <section class="panel"><div class="panel-title">Ready to analyse</div><p class="subtitle"><%= @project.real_mode? ? "Treatment and outcome data will be evaluated." : "A semi-synthetic holdout will be generated from the order history." %></p><%= button_to "Run uplift analysis", run_lab_project_path(@project), method: :post, class: "btn btn-primary" %></section>
+<% elsif @project.status == "running" %>
+  <section class="panel" data-controller="lab-status" data-lab-status-url-value="<%= status_lab_project_path(@project) %>"><div class="panel-title"><span class="spinner"></span> Analysis running</div><p class="subtitle" style="margin-bottom:0;">Validating data, building pre-treatment features and evaluating uplift models.</p></section>
+<% elsif @project.status == "failed" %>
+  <section class="panel"><div class="panel-title">Analysis could not finish</div><div class="errors"><%= @project.error_message %></div><div class="actions"><%= link_to "Review mapping", mapping_lab_project_path(@project), class: "btn btn-primary" %></div></section>
+<% elsif @run&.completed? %>
+  <% metrics = @run.metrics.with_indifferent_access %>
+  <div class="callout"><strong><%= @run.evidence_type.humanize %>.</strong> <%= metrics[:evidence_note] %></div>
+  <% @run.warnings.each do |warning| %><div class="flash flash-alert"><%= warning %></div><% end %>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Customers</div><div class="metric-value"><%= number_with_delimiter(metrics[:customers]) %></div></div>
+    <div class="metric"><div class="metric-label">Observed uplift</div><div class="metric-value accent"><%= number_to_percentage(metrics[:observed_uplift].to_f * 100, precision: 2) %></div></div>
+    <div class="metric"><div class="metric-label">AUUC</div><div class="metric-value"><%= number_with_precision(metrics[:auuc], precision: 3) %></div></div>
+    <div class="metric"><div class="metric-label">Qini</div><div class="metric-value"><%= number_with_precision(metrics[:qini], precision: 3) %></div></div>
+    <div class="metric"><div class="metric-label">Lift @ 30%</div><div class="metric-value accent"><%= number_to_percentage(metrics[:lift_at_30].to_f * 100, precision: 1) %></div></div>
+  </div>
+
+  <section class="panel">
+    <div class="eyebrow">Data quality</div><div class="panel-title">Validated analysis population</div>
+    <div class="table-wrap"><table><tbody>
+      <tr><td>Valid orders</td><td class="mono"><%= number_with_delimiter(@project.data_audit["valid_orders"]) %></td><td>Removed duplicates</td><td class="mono"><%= number_with_delimiter(@project.data_audit["duplicate_orders_removed"]) %></td></tr>
+      <tr><td>Treatment customers</td><td class="mono"><%= number_with_delimiter(metrics[:treated_customers]) %></td><td>Control customers</td><td class="mono"><%= number_with_delimiter(metrics[:control_customers]) %></td></tr>
+      <tr><td>Treatment conversion</td><td class="mono"><%= number_to_percentage(metrics[:treated_conversion_rate].to_f * 100, precision: 2) %></td><td>Control conversion</td><td class="mono"><%= number_to_percentage(metrics[:control_conversion_rate].to_f * 100, precision: 2) %></td></tr>
+      <tr><td>Selected model</td><td class="mono" colspan="3"><%= metrics[:model_selected].to_s.humanize %></td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="panel">
+    <div class="eyebrow">Ranked validation</div><div class="panel-title">Observed uplift by score decile</div>
+    <% deciles = @run.deciles.map(&:with_indifferent_access) %><% max_abs = [deciles.map { |d| d[:observed_uplift].to_f.abs }.max.to_f, 0.001].max %>
+    <div class="deciles"><% deciles.each do |decile| %><% height = [(decile[:observed_uplift].to_f.abs / max_abs * 130).round, 2].max %><div class="decile" title="Decile <%= decile[:decile] %>: <%= number_to_percentage(decile[:observed_uplift].to_f * 100, precision: 2) %>"><div class="decile-bar" style="height:<%= height %>px;background:<%= decile[:observed_uplift].to_f.negative? ? 'var(--danger)' : 'var(--accent)' %>;"></div><div class="decile-label"><%= decile[:decile] %></div></div><% end %></div>
+  </section>
+
+  <section class="panel">
+    <div class="eyebrow">Demo actions</div><div class="panel-title">Customers ranked by incremental effect</div>
+    <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Decision</th><th>Uplift</th><th>P control</th><th>P treatment</th><th>Incremental revenue</th><th>Profit</th></tr></thead><tbody>
+      <% @predictions.each do |prediction| %><tr><td class="mono"><%= prediction.customer_label %><div class="meta"><%= prediction.segment.humanize %></div></td><td><%= prediction.recommended_action %></td><td class="mono accent"><%= number_to_percentage(prediction.uplift_score.to_f * 100, precision: 1) %></td><td class="mono"><%= number_to_percentage(prediction.probability_control.to_f * 100, precision: 1) %></td><td class="mono"><%= number_to_percentage(prediction.probability_treatment.to_f * 100, precision: 1) %></td><td class="mono">€<%= number_with_precision(prediction.expected_incremental_revenue, precision: 2) %></td><td class="mono">€<%= number_with_precision(prediction.expected_incremental_profit, precision: 2) %></td></tr><% end %>
+    </tbody></table></div>
+  </section>
+<% end %>
+
+<div class="actions">
+  <% if @run&.completed? && @run.predictions_file.attached? %><%= link_to "Download all predictions", download_lab_project_path(@project), class: "btn btn-primary" %><% end %>
+  <% if @project.orders_file.attached? %><%= link_to "Download orders CSV", download_source_lab_project_path(@project, kind: "orders"), class: "btn" %><% end %>
+  <% if @project.experiment_file.attached? %><%= link_to "Download experiment CSV", download_source_lab_project_path(@project, kind: "experiment"), class: "btn" %><% end %>
+  <% if @project.orders_file.attached? && @project.status.in?(%w[ready completed failed]) %><%= link_to "Edit mapping", mapping_lab_project_path(@project), class: "btn" %><% end %>
+  <%= link_to "All projects", lab_root_path, class: "btn" %>
+  <%= button_to "Delete project", lab_project_path(@project), method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Delete this project and all private files?" } } %>
+</div>

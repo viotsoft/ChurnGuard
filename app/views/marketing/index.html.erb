@@ -1,0 +1,112 @@
+<% content_for :title, "ChurnGuard — Recover revenue before customers disappear" %>
+
+<main class="marketing-page">
+  <header class="marketing-nav">
+    <%= link_to "ChurnGuard", landing_path, class: "marketing-logo" %>
+    <nav class="marketing-nav__links" aria-label="Primary">
+      <a href="#how-it-works">How it works</a>
+      <a href="#proof">Proof</a>
+      <a href="#pilot">Pilot</a>
+      <%= link_to "Data Lab", lab_root_path %>
+      <% if Rails.env.development? %>
+        <%= link_to "View demo", dev_login_path(shop: @demo_shop_domain), class: "marketing-nav__demo" %>
+      <% else %>
+        <a href="mailto:founder@churnguard.local?subject=ChurnGuard%20pilot" class="marketing-nav__demo">Request pilot</a>
+      <% end %>
+    </nav>
+  </header>
+
+  <section class="marketing-hero">
+    <div class="marketing-hero__copy">
+      <p class="marketing-eyebrow">Retention actions for Shopify merchants</p>
+      <h1>Recover revenue before repeat customers disappear.</h1>
+      <p class="marketing-hero__lead">
+        ChurnGuard opens on the work that matters: customers at risk, revenue exposed,
+        and one retention action ready for approval.
+      </p>
+      <div class="marketing-actions">
+        <% if Rails.env.development? %>
+          <%= link_to "Open live demo", dev_login_path(shop: @demo_shop_domain), class: "marketing-btn marketing-btn--primary" %>
+        <% else %>
+          <a href="mailto:founder@churnguard.local?subject=ChurnGuard%20pilot" class="marketing-btn marketing-btn--primary">Request pilot</a>
+        <% end %>
+        <% if Rails.env.development? %>
+          <%= link_to "See demo results",
+                dev_login_path(shop: @demo_shop_domain, next: demo_results_dashboard_index_path),
+                class: "marketing-btn marketing-btn--secondary" %>
+        <% else %>
+          <%= link_to "See demo results", demo_results_dashboard_index_path, class: "marketing-btn marketing-btn--secondary" %>
+        <% end %>
+        <%= link_to "Validate a CSV", lab_root_path, class: "marketing-btn marketing-btn--secondary" %>
+      </div>
+    </div>
+
+    <figure class="marketing-hero__visual">
+      <%= image_tag "landing-approval-queue.png",
+            alt: "ChurnGuard approval queue showing revenue at risk and a customer retention action" %>
+    </figure>
+  </section>
+
+  <section id="how-it-works" class="marketing-section">
+    <div class="marketing-section__intro">
+      <p class="marketing-eyebrow">Action-first workflow</p>
+      <h2>Not another dashboard to interpret.</h2>
+    </div>
+    <div class="marketing-steps">
+      <div class="marketing-step">
+        <span>1</span>
+        <h3>Connect commerce data</h3>
+        <p>Orders and customers become a retention-ready customer history.</p>
+      </div>
+      <div class="marketing-step">
+        <span>2</span>
+        <h3>Score churn risk</h3>
+        <p>Version one uses an explainable RFM baseline that is easy to defend.</p>
+      </div>
+      <div class="marketing-step">
+        <span>3</span>
+        <h3>Approve the action</h3>
+        <p>The merchant sees revenue at risk first, then approves or skips.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="proof" class="marketing-proof">
+    <div>
+      <p class="marketing-eyebrow">Demo proof</p>
+      <h2>Built around a working approval queue.</h2>
+      <p>
+        The current MVP combines a Shopify operating workflow with a separate CSV
+        evidence lab. The first demonstrates decisions and execution; the second
+        measures whether treatment changes customer behaviour.
+      </p>
+    </div>
+    <div class="marketing-proof__metrics">
+      <div><strong>62</strong><span>demo customers</span></div>
+      <div><strong>292</strong><span>paid orders</span></div>
+      <div><strong>33</strong><span>pending actions</span></div>
+      <div><strong>€19.8K</strong><span>revenue at risk</span></div>
+    </div>
+  </section>
+
+  <section id="pilot" class="marketing-section marketing-pilot">
+    <div class="marketing-section__intro">
+      <p class="marketing-eyebrow">Roadmap</p>
+      <h2>One retention product, three levels of evidence.</h2>
+    </div>
+    <div class="marketing-roadmap">
+      <div>
+        <h3>Shopify workflow</h3>
+        <p>Live commerce data, churn signals, approval queue, action history, and Klaviyo execution.</p>
+      </div>
+      <div>
+        <h3>Dataset proof</h3>
+        <p>Reproducible sample data shows model quality, uplift ranking, negative effects, and economics.</p>
+      </div>
+      <div>
+        <h3>CSV experiments</h3>
+        <p>Any merchant can validate orders alone or add treatment and control outcomes from a real campaign.</p>
+      </div>
+    </div>
+  </section>
+</main>

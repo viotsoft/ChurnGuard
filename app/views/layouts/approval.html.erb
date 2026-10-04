@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ChurnGuard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #F5F0E8;
+      font-family: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #1A1410;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .approval-wrap {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .logo {
+      font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1A1410;
+      letter-spacing: -0.02em;
+      display: block;
+      margin-bottom: 24px;
+      text-decoration: none;
+    }
+
+    .card {
+      background: #FDFAF4;
+      border: 1px solid #DDD5C8;
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    @media (max-width: 520px) {
+      .card { padding: 28px 20px; }
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #B0A594;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="approval-wrap">
+    <span class="logo">ChurnGuard</span>
+    <div class="card">
+      <%= yield %>
+    </div>
+    <p class="footer-note">
+      ChurnGuard · Automated retention for Shopify
+    </p>
+  </div>
+</body>
+</html>

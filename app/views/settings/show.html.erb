@@ -1,0 +1,52 @@
+<% content_for :title, "Settings" %>
+
+<h1 class="page-title">Settings</h1>
+
+<%# ── Klaviyo integration ──────────────────────────────────────────────────── %>
+<div class="settings-section">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+    <div class="settings-section__title">Klaviyo connection</div>
+    <% if @klaviyo_connected %>
+      <span class="connection-badge connection-badge--connected">
+        <span class="connection-badge__dot"></span> Connected
+      </span>
+    <% else %>
+      <span class="connection-badge connection-badge--disconnected">
+        <span class="connection-badge__dot"></span> Not connected
+      </span>
+    <% end %>
+  </div>
+  <div class="settings-section__sub">
+    ChurnGuard uses your Klaviyo Private API key to trigger retention campaigns
+    when you approve a customer action.
+    <% unless @klaviyo_connected %>
+      <br><strong style="color:var(--danger);">Add your API key to enable campaign sending.</strong>
+    <% end %>
+  </div>
+
+  <%= form_with model: @shop, url: settings_path, method: :patch do |f| %>
+    <div class="form-field">
+      <%= f.label :klaviyo_api_key, "Klaviyo Private API key" %>
+      <%= f.text_field :klaviyo_api_key,
+            placeholder: "pk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            autocomplete: "off",
+            value: @shop.klaviyo_api_key.present? ? "#{@shop.klaviyo_api_key.first(8)}#{"•" * 24}" : "" %>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+        Find this in Klaviyo → Account → Settings → API Keys → Private API Keys.
+        Keep it secret — it allows ChurnGuard to trigger campaigns on your behalf.
+      </div>
+    </div>
+
+    <%= f.submit "Save settings",
+          style: "padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-md);font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;" %>
+  <% end %>
+</div>
+
+<%# ── Shop info ───────────────────────────────────────────────────────────── %>
+<div class="settings-section">
+  <div class="settings-section__title">Shop</div>
+  <div class="settings-section__sub">Your connected Shopify store.</div>
+  <div style="font-family:'Geist Mono',monospace;font-size:13px;color:var(--text);">
+    <%= @shop.shopify_domain %>
+  </div>
+</div>

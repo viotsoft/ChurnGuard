@@ -1,0 +1,33 @@
+<% content_for :title, "New project" %>
+<% content_for :narrow, true %>
+
+<div class="eyebrow">New analysis</div>
+<h1 class="title">Upload e-commerce data</h1>
+<p class="subtitle">Orders are required. Add a treatment/control file to evaluate a real campaign; otherwise Data Lab runs a clearly labelled simulation.</p>
+
+<% if @project.errors.any? %>
+  <div class="errors"><%= @project.errors.full_messages.join(" ") %></div>
+<% end %>
+
+<%= form_with model: @project, url: lab_projects_path, html: { multipart: true } do |form| %>
+  <section class="panel">
+    <div class="field">
+      <%= form.label :name, "Project name" %>
+      <%= form.text_field :name, required: true, placeholder: "Spring retention campaign" %>
+    </div>
+    <div class="field">
+      <%= form.label :orders_file, "Orders CSV" %>
+      <%= form.file_field :orders_file, required: true, accept: ".csv,text/csv" %>
+      <small>Required: customer ID, order ID, date and positive order amount. Maximum 200 MB.</small>
+    </div>
+    <div class="field">
+      <%= form.label :experiment_file, "Experiment CSV (optional)" %>
+      <%= form.file_field :experiment_file, accept: ".csv,text/csv" %>
+      <small>Customer ID, treatment/control assignment and purchase outcome.</small>
+    </div>
+    <div class="actions">
+      <%= form.submit "Upload and map columns", class: "btn btn-primary" %>
+      <%= link_to "Cancel", lab_root_path, class: "btn" %>
+    </div>
+  </section>
+<% end %>

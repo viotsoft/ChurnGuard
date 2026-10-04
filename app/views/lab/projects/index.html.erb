@@ -1,0 +1,29 @@
+<% content_for :title, "Projects" %>
+
+<div class="eyebrow">Uplift workspaces</div>
+<h1 class="title">Data Lab projects</h1>
+<p class="subtitle">Each project is isolated from Shopify production data and cannot send a campaign.</p>
+
+<div class="actions">
+  <%= link_to "New CSV project", new_lab_project_path, class: "btn btn-primary" %>
+  <%= button_to "Use sample dataset", sample_lab_projects_path, method: :post, class: "btn" %>
+</div>
+
+<div class="project-list">
+  <% @projects.each do |project| %>
+    <%= link_to lab_project_path(project), class: "project-row" do %>
+      <div>
+        <div class="project-name"><%= project.name %></div>
+        <div class="meta"><%= project.mode.to_s.humanize.presence || "Awaiting configuration" %> · <%= project.created_at.to_date.to_fs(:long) %></div>
+      </div>
+      <span class="status status-<%= project.status %>"><%= project.status.humanize %></span>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @projects.empty? %>
+  <section class="panel">
+    <div class="panel-title">No analyses yet</div>
+    <p class="subtitle" style="margin-bottom:0;">Upload order history or start with the reproducible sample dataset.</p>
+  </section>
+<% end %>

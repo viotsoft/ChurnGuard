@@ -1,0 +1,5 @@
+customer_id,order_id,ordered_at,amount,currency,status
+c-001,o-001,2025-01-10,49.90,EUR,paid
+c-001,o-002,2025-04-12,65.00,EUR,paid
+c-002,o-003,2025-02-20,120.00,EUR,paid
+c-003,o-004,2025-03-15,-20.00,EUR,refunded

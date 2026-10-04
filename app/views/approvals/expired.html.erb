@@ -1,0 +1,53 @@
+<style>
+  .expired-icon { font-size: 36px; margin-bottom: 16px; display: block; opacity: 0.5; }
+  .expired-heading {
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-size: 28px; font-weight: 600; color: #1A1410;
+    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px;
+  }
+  .expired-sub {
+    font-size: 15px; color: #8A7E6F; line-height: 1.6; margin-bottom: 24px;
+  }
+  .expired-box {
+    background: #F0EAE0; border-left: 3px solid #FAE8DE;
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 28px;
+  }
+  .expired-box p { font-size: 14px; color: #6B5C4A; line-height: 1.55; }
+  .divider { border: none; border-top: 1px solid #EBE4DB; margin: 24px 0; }
+  .dashboard-link {
+    display: block; text-align: center;
+    font-size: 14px; font-weight: 600; color: #8A7E6F;
+    text-decoration: none; padding: 10px;
+    border: 1px solid #DDD5C8; border-radius: 8px;
+  }
+  .dashboard-link:hover { color: #1A1410; border-color: #B0A594; }
+</style>
+
+<span class="expired-icon">⏱</span>
+
+<h1 class="expired-heading">This action has expired</h1>
+
+<p class="expired-sub">
+  The 72-hour approval window for
+  <strong><%= @customer&.display_name || "this customer" %></strong>
+  closed
+  <% if @expired_days_ago && @expired_days_ago > 0 %>
+    <%= pluralize(@expired_days_ago, "day") %> ago
+  <% else %>
+    recently
+  <% end %>.
+</p>
+
+<div class="expired-box">
+  <p>
+    If <%= @customer&.display_name&.split&.first || "this customer" %>
+    is still showing signs of churn, you'll see them again in tomorrow's summary.
+    Nothing is lost — ChurnGuard keeps watching.
+  </p>
+</div>
+
+<hr class="divider">
+
+<a href="<%= root_path %>" class="dashboard-link">
+  View dashboard →
+</a>

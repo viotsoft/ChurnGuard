@@ -1,0 +1,67 @@
+<% content_for :title, "Map columns" %>
+
+<div class="eyebrow"><%= @project.name %></div>
+<h1 class="title">Confirm dataset columns</h1>
+<p class="subtitle">Data Lab detected likely matches. Correct any mapping before the analysis starts.</p>
+
+<% if @project.errors.any? %><div class="errors"><%= @project.errors.full_messages.join(" ") %></div><% end %>
+
+<%= form_with url: mapping_lab_project_path(@project), method: :patch, scope: :analysis_project do |form| %>
+  <section class="panel">
+    <div class="eyebrow">Orders CSV</div>
+    <% CsvDatasetInspector::ORDER_FIELDS.each do |field| %>
+      <div class="mapping-row">
+        <%= form.label "orders_mapping_#{field}", field.humanize + (CsvDatasetInspector::REQUIRED_ORDER_FIELDS.include?(field) ? " *" : "") %>
+        <%= select_tag "analysis_project[orders_mapping][#{field}]", options_for_select([["Not mapped", ""]] + @orders_headers.map { |h| [h, h] }, @project.column_mapping.dig("orders", field)), id: "analysis_project_orders_mapping_#{field}" %>
+      </div>
+    <% end %>
+    <% orders_preview = @project.data_audit.dig("orders", "preview") || [] %>
+    <% ignored_orders = @project.data_audit.dig("orders", "ignored_headers") || [] %>
+    <% if ignored_orders.any? %><p class="meta">Privacy filter ignored: <%= ignored_orders.join(", ") %>.</p><% end %>
+    <% if orders_preview.any? %>
+      <div class="preview table-wrap"><table><thead><tr><% @orders_headers.each do |header| %><th><%= header %></th><% end %></tr></thead><tbody>
+        <% orders_preview.each do |row| %><tr><% @orders_headers.each do |header| %><td><%= row[header] %></td><% end %></tr><% end %>
+      </tbody></table></div>
+    <% end %>
+  </section>
+
+  <% if @project.experiment_file.attached? %>
+    <section class="panel">
+      <div class="eyebrow">Experiment CSV</div>
+      <% CsvDatasetInspector::EXPERIMENT_FIELDS.each do |field| %>
+        <div class="mapping-row">
+          <%= form.label "experiment_mapping_#{field}", field.humanize + (CsvDatasetInspector::REQUIRED_EXPERIMENT_FIELDS.include?(field) ? " *" : "") %>
+          <%= select_tag "analysis_project[experiment_mapping][#{field}]", options_for_select([["Not mapped", ""]] + @experiment_headers.map { |h| [h, h] }, @project.column_mapping.dig("experiment", field)), id: "analysis_project_experiment_mapping_#{field}" %>
+        </div>
+      <% end %>
+      <% experiment_preview = @project.data_audit.dig("experiment", "preview") || [] %>
+      <% ignored_experiment = @project.data_audit.dig("experiment", "ignored_headers") || [] %>
+      <% if ignored_experiment.any? %><p class="meta">Privacy filter ignored: <%= ignored_experiment.join(", ") %>.</p><% end %>
+      <% if experiment_preview.any? %>
+        <div class="preview table-wrap"><table><thead><tr><% @experiment_headers.each do |header| %><th><%= header %></th><% end %></tr></thead><tbody>
+          <% experiment_preview.each do |row| %><tr><% @experiment_headers.each do |header| %><td><%= row[header] %></td><% end %></tr><% end %>
+        </tbody></table></div>
+      <% end %>
+    </section>
+  <% end %>
+
+  <section class="panel">
+    <div class="eyebrow">Analysis settings</div>
+    <% if @project.experiment_file.attached? %>
+      <div class="field">
+        <%= form.label :analysis_mode, "Analysis mode" %>
+        <%= form.select :analysis_mode, [["Use treatment/control outcomes", "real"], ["Run semi-synthetic validation", "semi_synthetic"]], selected: @project.mode %>
+      </div>
+    <% end %>
+    <div class="field-grid">
+      <div class="field"><%= form.label :campaign_date, "Campaign date" %><%= form.date_field :campaign_date, value: @project.campaign_date %><small>Required for experiment data unless assigned_at is mapped.</small></div>
+      <div class="field"><%= form.label :outcome_window_days, "Outcome window, days" %><%= form.number_field :outcome_window_days, value: @project.outcome_window_days, min: 7, max: 90, required: true %></div>
+      <div class="field"><%= form.label :gross_margin_percent, "Gross margin, %" %><%= form.number_field :gross_margin_percent, value: (@project.gross_margin_rate.to_d * 100), min: 0, max: 100, step: 0.1 %></div>
+      <div class="field"><%= form.label :discount_percent, "Offer discount, %" %><%= form.number_field :discount_percent, value: (@project.discount_rate.to_d * 100), min: 0, max: 100, step: 0.1 %></div>
+      <div class="field"><%= form.label :contact_cost, "Contact cost" %><%= form.number_field :contact_cost, value: @project.contact_cost, min: 0, step: 0.01 %></div>
+    </div>
+    <% if @project.experiment_file.attached? %><label class="check"><%= form.check_box :randomized_treatment %><span>Treatment was assigned randomly or through a controlled holdout.</span></label><% end %>
+  </section>
+
+  <div class="actions"><%= form.submit "Save configuration", class: "btn btn-primary" %><%= link_to "Back", lab_project_path(@project), class: "btn" %></div>
+<% end %>

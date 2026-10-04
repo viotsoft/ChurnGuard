@@ -1,0 +1,5 @@
+# Recurring production jobs are run by Sidekiq/system scheduler, not Solid Queue.
+# Minimum recurring tasks:
+# - DailyScoringJob.enqueue_all once daily
+# - TokenExpiryJob once daily
+# - AnalysisRetentionJob once daily (purges raw CSV after 24h and results after 30d)

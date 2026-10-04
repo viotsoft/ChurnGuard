@@ -1,0 +1,37 @@
+# ChurnGuard RFM Scoring Thresholds
+#
+# These are calibrated against the golden fixtures in db/seeds/golden_fixtures.rb.
+# Changing a value here will be caught by spec/scoring/golden_fixtures_spec.rb
+# if it moves a fixture's tier — which is intentional. Update both together.
+#
+# All thresholds validated with placeholder values for v1.
+# CALIBRATE these with real data from first 3 shops (see TODOS.md #7).
+
+default: &default
+  recency:
+    high_risk_days: 180    # Last purchase > 180 days → HIGH risk tier
+    medium_risk_days: 90   # Last purchase > 90 days → MEDIUM risk tier
+    # < 90 days → LOW risk for recency
+
+  frequency:
+    high_risk_orders: 1    # Exactly 1 order → HIGH risk tier
+    medium_risk_max: 4     # 2–4 orders → MEDIUM risk tier
+    # 5+ orders → LOW risk for frequency
+
+  monetary:
+    # If customer's total spent is below the shop's median LTV,
+    # bump their combined tier up one level (low → medium, medium → high)
+    below_median_bumps_tier: true
+
+  # Minimum data for a shop to qualify for scoring (not "onboarding" state)
+  minimum_customers: 10
+  minimum_orders: 30
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

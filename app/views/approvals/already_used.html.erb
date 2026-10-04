@@ -1,0 +1,52 @@
+<style>
+  .used-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+  .used-heading {
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-size: 28px; font-weight: 600; color: #1A1410;
+    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px;
+  }
+  .used-sub {
+    font-size: 15px; color: #8A7E6F; line-height: 1.6; margin-bottom: 24px;
+  }
+  .used-box {
+    background: #E0F0E8; border-radius: 8px; padding: 14px 18px; margin-bottom: 28px;
+  }
+  .used-box p { font-size: 14px; color: #3D7A5C; line-height: 1.55; }
+  .divider { border: none; border-top: 1px solid #EBE4DB; margin: 24px 0; }
+  .dashboard-link {
+    display: block; text-align: center;
+    font-size: 14px; font-weight: 600; color: #8A7E6F;
+    text-decoration: none; padding: 10px;
+    border: 1px solid #DDD5C8; border-radius: 8px;
+  }
+  .dashboard-link:hover { color: #1A1410; border-color: #B0A594; }
+</style>
+
+<% if @previously_approved %>
+  <span class="used-icon">✓</span>
+  <h1 class="used-heading">Already approved</h1>
+  <p class="used-sub">
+    You already approved this action for
+    <strong><%= @customer&.display_name || "this customer" %></strong>.
+    Klaviyo has been notified.
+  </p>
+  <div class="used-box">
+    <p>The discount campaign is already in your Klaviyo queue. No need to do anything else.</p>
+  </div>
+<% else %>
+  <span class="used-icon">○</span>
+  <h1 class="used-heading">Already handled</h1>
+  <p class="used-sub">
+    You already responded to this action for
+    <strong><%= @customer&.display_name || "this customer" %></strong>.
+  </p>
+  <div class="used-box">
+    <p>This link can only be used once. Check your dashboard to see the current status.</p>
+  </div>
+<% end %>
+
+<hr class="divider">
+
+<a href="<%= root_path %>" class="dashboard-link">
+  View dashboard →
+</a>

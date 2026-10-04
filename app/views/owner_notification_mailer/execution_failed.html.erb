@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retention actions failed — ChurnGuard</title>
+  <style>
+    /* ── Reset ─────────────────────────────────────────────── */
+    body, table, td, p, a, li, blockquote {
+      -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;
+    }
+    table { border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0; }
+    img { border: 0; line-height: 100%; outline: none; text-decoration: none; }
+
+    /* ── Tokens ─────────────────────────────────────────────── */
+    body { background-color: #F5F0E8; margin: 0; padding: 0; }
+
+    /* ── Fonts ──────────────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Instrument+Sans:wght@400;600&display=swap');
+  </style>
+</head>
+<body style="background-color:#F5F0E8; margin:0; padding:0; font-family:'Instrument Sans', Arial, sans-serif;">
+
+  <!-- Outer wrapper -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0"
+         style="background-color:#F5F0E8;">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+
+        <!-- Card -->
+        <table width="560" cellpadding="0" cellspacing="0" border="0"
+               style="background:#FFFDF9; border-radius:12px;
+                      border:1px solid #EBE4DB; max-width:560px; width:100%;">
+          <tr>
+            <td style="padding:40px 40px 32px;">
+
+              <!-- Header: logo + wordmark -->
+              <p style="margin:0 0 32px; font-family:'Instrument Sans',Arial,sans-serif;
+                         font-size:13px; font-weight:600; color:#8A7E6F;
+                         letter-spacing:0.08em; text-transform:uppercase;">
+                ChurnGuard
+              </p>
+
+              <!-- Alert icon -->
+              <p style="margin:0 0 16px; font-size:32px; line-height:1;">⚠️</p>
+
+              <!-- Heading -->
+              <h1 style="margin:0 0 8px;
+                          font-family:'Fraunces',Georgia,'Times New Roman',serif;
+                          font-size:28px; font-weight:600; color:#1A1410;
+                          letter-spacing:-0.02em; line-height:1.2;">
+                <%= @failed_count %>
+                <%= @failed_count == 1 ? "retention action" : "retention actions" %>
+                failed to send
+              </h1>
+
+              <!-- Sub-heading -->
+              <p style="margin:0 0 28px; font-size:15px; color:#6B5C4A; line-height:1.6;">
+                ChurnGuard could not reach Klaviyo after multiple attempts.
+                Your customers are still being monitored — no action was lost —
+                but the discount campaigns were not delivered.
+              </p>
+
+              <!-- Divider -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="border-top:1px solid #EBE4DB; padding-bottom:28px;"></td>
+                </tr>
+              </table>
+
+              <!-- Detail box -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="background:#F0EAE0; border-left:3px solid #D4500A;
+                             border-radius:0 8px 8px 0; margin-bottom:32px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 6px; font-size:12px; font-weight:600;
+                               color:#8A7E6F; letter-spacing:0.06em;
+                               text-transform:uppercase;">What happened</p>
+                    <p style="margin:0; font-size:14px; color:#4A3C2E; line-height:1.6;">
+                      The connection between ChurnGuard and Klaviyo failed.
+                      This usually means your Klaviyo API key is missing,
+                      revoked, or your account has reached a plan limit.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Primary CTA -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="margin-bottom:16px;">
+                <tr>
+                  <td align="center"
+                      style="background-color:#D4500A; border-radius:8px;">
+                    <a href="<%= @settings_url %>"
+                       style="display:block; padding:14px 24px;
+                               font-family:'Instrument Sans',Arial,sans-serif;
+                               font-size:15px; font-weight:600; color:#FFFFFF;
+                               text-decoration:none; letter-spacing:0.01em;">
+                      Check Klaviyo settings →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Reassurance note -->
+              <p style="margin:0; font-size:13px; color:#8A7E6F;
+                         line-height:1.6; text-align:center;">
+                Once your Klaviyo connection is restored, new actions will
+                send automatically. Reply to this email if you need help.
+              </p>
+
+              <!-- Footer divider -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="margin-top:32px;">
+                <tr>
+                  <td style="border-top:1px solid #EBE4DB; padding-top:20px;">
+                    <p style="margin:0; font-size:12px; color:#B0A594;
+                               text-align:center; line-height:1.6;">
+                      ChurnGuard · Automated retention for Shopify stores<br>
+                      You're receiving this because a system alert was triggered
+                      for <%= @shop.shopify_domain %>.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

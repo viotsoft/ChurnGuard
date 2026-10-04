@@ -1,0 +1,45 @@
+<style>
+  .invalid-icon { font-size: 36px; margin-bottom: 16px; display: block; opacity: 0.4; }
+  .invalid-heading {
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-size: 28px; font-weight: 600; color: #1A1410;
+    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px;
+  }
+  .invalid-sub {
+    font-size: 15px; color: #8A7E6F; line-height: 1.6; margin-bottom: 24px;
+  }
+  .invalid-box {
+    background: #F0EAE0; border-left: 3px solid #FAE8DE;
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 28px;
+  }
+  .invalid-box p { font-size: 14px; color: #6B5C4A; line-height: 1.55; }
+  .divider { border: none; border-top: 1px solid #EBE4DB; margin: 24px 0; }
+  .dashboard-link {
+    display: block; text-align: center;
+    font-size: 14px; font-weight: 600; color: #8A7E6F;
+    text-decoration: none; padding: 10px;
+    border: 1px solid #DDD5C8; border-radius: 8px;
+  }
+  .dashboard-link:hover { color: #1A1410; border-color: #B0A594; }
+</style>
+
+<span class="invalid-icon">⚠</span>
+
+<h1 class="invalid-heading">Invalid approval link</h1>
+
+<p class="invalid-sub">
+  This link doesn't look right — it may have been truncated or modified by your email client.
+</p>
+
+<div class="invalid-box">
+  <p>
+    Please reopen the original ChurnGuard email and click the button directly.
+    If the problem persists, the link may have already been used or may have expired.
+  </p>
+</div>
+
+<hr class="divider">
+
+<a href="<%= root_path %>" class="dashboard-link">
+  View dashboard →
+</a>

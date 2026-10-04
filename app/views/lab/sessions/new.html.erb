@@ -1,0 +1,16 @@
+<% content_for :title, "Sign in" %>
+<% content_for :narrow, true %>
+
+<div class="eyebrow">Private uplift sandbox</div>
+<h1 class="title">Test retention decisions on your data</h1>
+<p class="subtitle">Use a private email link to open a temporary analysis workspace. Shopify is not required.</p>
+
+<section class="panel">
+  <%= form_with url: lab_sign_in_path do |form| %>
+    <div class="field">
+      <%= form.label :email, "Work email" %>
+      <%= form.email_field :email, required: true, autocomplete: "email", placeholder: "you@store.com" %>
+    </div>
+    <%= form.submit "Email me a sign-in link", class: "btn btn-primary" %>
+  <% end %>
+</section>

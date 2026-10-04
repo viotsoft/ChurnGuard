@@ -1,0 +1,38 @@
+# Rails
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Local environment
+/.env
+/.env.*
+!/.env.example
+
+# Credentials
+/config/master.key
+/config/credentials/*.key
+
+# Bundler
+/.bundle
+/vendor/bundle
+
+# Local uploads and generated deliverables
+/storage/*
+!/storage/.keep
+/outputs/
+/research/ml/__pycache__/
+/research/uplift_v3_notebook/.ipynb_checkpoints/
+/research/uplift_v3_notebook/data/current_app_*.csv
+/research/uplift_v3_notebook/exports/
+*.pyc
+~$*
+
+# Generated assets
+/public/assets
+/public/packs
+/node_modules
+
+# OS/editor noise
+.DS_Store
+*.swp

@@ -1,0 +1,160 @@
+<% content_for :title, "Demo results" %>
+
+<h1 class="page-title">Demo results</h1>
+
+<div style="background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius-xl);padding:24px;margin-bottom:28px;">
+  <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">
+    Investor demo snapshot
+  </div>
+  <p style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:680px;">
+    ChurnGuard Uplift V3 turns Shopify purchase history into concrete retention
+    decisions. The demo compares the old question, "who is at risk?", with the
+    stronger operating question, "which action is expected to create incremental
+    revenue?" The primary approval queue stays chart-free.
+  </p>
+</div>
+
+<div class="metrics-bar">
+  <div class="metric-chip">
+    <div class="metric-chip__label">Customers scored</div>
+    <div class="metric-chip__value"><%= @demo_metrics[:customers_scored] %></div>
+  </div>
+  <div class="metric-chip">
+    <div class="metric-chip__label">Orders synced</div>
+    <div class="metric-chip__value"><%= @demo_metrics[:orders_synced] %></div>
+  </div>
+  <div class="metric-chip">
+    <div class="metric-chip__label">Pending actions</div>
+    <div class="metric-chip__value"><%= @demo_metrics[:pending_actions] %></div>
+  </div>
+  <div class="metric-chip">
+    <div class="metric-chip__label">Expected incremental</div>
+    <div class="metric-chip__value metric-chip__value--accent">
+      €<%= number_with_delimiter(@demo_metrics[:expected_incremental].round(0).to_i) %>
+    </div>
+  </div>
+  <div class="metric-chip">
+    <div class="metric-chip__label">Avg uplift</div>
+    <div class="metric-chip__value metric-chip__value--accent">
+      +<%= (@demo_metrics[:average_uplift] * 100).round(1) %>%
+    </div>
+  </div>
+</div>
+
+<section style="background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius-xl);padding:24px;margin-bottom:28px;">
+  <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">
+    Product evolution
+  </div>
+  <h2 style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--text);margin-bottom:10px;">
+    From risk scoring to action selection
+  </h2>
+  <p style="font-size:14px;color:var(--text-muted);line-height:1.6;max-width:720px;margin-bottom:18px;">
+    RFM and churn prediction help find customers who may drift away. Uplift V3 asks a
+    stronger question: which specific retention action is expected to change the outcome?
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px;">
+    <div style="background:var(--surface-2);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:14px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Step 1</div>
+      <div style="font-weight:600;color:var(--text);margin-bottom:6px;">RFM</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.5;">Customer has not purchased recently.</div>
+    </div>
+    <div style="background:var(--surface-2);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:14px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Step 2</div>
+      <div style="font-weight:600;color:var(--text);margin-bottom:6px;">ML churn</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.5;">Customer has a high probability of not returning.</div>
+    </div>
+    <div style="background:var(--accent-light);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:14px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Step 3</div>
+      <div style="font-weight:600;color:var(--accent);margin-bottom:6px;">Uplift V3</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.5;">This action is expected to create incremental revenue.</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;">
+    <div style="border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:14px;">
+      <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;">High risk, low action value</div>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.5;">
+        A customer may look risky, but if the offer is unlikely to change behavior,
+        ChurnGuard should avoid wasting a discount.
+      </p>
+    </div>
+    <div style="border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:14px;">
+      <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;">Medium risk, high uplift</div>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.5;">
+        A customer with moderate churn risk can still be the better target when a
+        specific offer is expected to create incremental revenue.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="demo-results-grid">
+  <section style="background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius-xl);padding:24px;">
+    <h2 style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--text);margin-bottom:16px;">Risk breakdown</h2>
+    <% { "High risk" => "high", "Medium risk" => "medium", "Low risk" => "low" }.each do |label, tier| %>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border-soft);">
+        <span class="risk-badge risk-badge--<%= tier %>"><span class="risk-badge__dot"></span><%= label %></span>
+        <span style="font-family:'Geist Mono',monospace;color:var(--text);"><%= @risk_breakdown[tier].to_i %></span>
+      </div>
+    <% end %>
+  </section>
+
+  <section style="background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius-xl);padding:24px;">
+    <h2 style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--text);margin-bottom:16px;">Uplift demo</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border-soft);">
+      <span style="color:var(--text-muted);">Uplift decisions</span>
+      <span style="font-family:'Geist Mono',monospace;color:var(--accent);"><%= @demo_metrics[:uplift_actions] %></span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border-soft);">
+      <span style="color:var(--text-muted);">Executed actions</span>
+      <span style="font-family:'Geist Mono',monospace;color:var(--success);"><%= @demo_metrics[:executed_actions] %></span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border-soft);">
+      <span style="color:var(--text-muted);">Skipped actions</span>
+      <span style="font-family:'Geist Mono',monospace;color:var(--text-muted);"><%= @demo_metrics[:skipped_actions] %></span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+      <span style="color:var(--text-muted);">Historical recovered</span>
+      <span style="font-family:'Geist Mono',monospace;color:var(--accent);">
+        €<%= number_with_delimiter(@demo_metrics[:estimated_recovered].round(0).to_i) %>
+      </span>
+    </div>
+  </section>
+</div>
+
+<section style="background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius-xl);padding:24px;margin-bottom:28px;">
+  <h2 style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--text);margin-bottom:16px;">Top Uplift V3 decisions</h2>
+  <% if @top_pending_actions.any? %>
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Risk</th>
+          <th>Action</th>
+          <th>Incremental</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @top_pending_actions.each do |action| %>
+          <tr>
+            <td style="font-family:'Fraunces',serif;font-weight:600;"><%= action.customer.display_name %></td>
+            <td><span class="risk-badge risk-badge--<%= action.risk_tier %>"><span class="risk-badge__dot"></span><%= action.risk_tier %></span></td>
+            <td><%= action.uplift_decision? ? action.treatment_label : "#{action.proposed_discount} discount" %></td>
+            <td style="font-family:'Geist Mono',monospace;color:var(--accent);">
+              €<%= number_with_delimiter((action.expected_incremental_revenue || action.revenue_at_risk).round(0).to_i) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="font-size:14px;color:var(--text-muted);">No pending demo actions yet.</p>
+  <% end %>
+</section>
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;">
+  <%= link_to "Open approval queue", dashboard_index_path, class: "btn-primary", style: "width:auto;" %>
+  <%= link_to "Validate another dataset", lab_root_path, class: "btn-ghost", style: "width:auto;" %>
+  <%= link_to "View history", history_dashboard_index_path, class: "btn-ghost", style: "width:auto;" %>
+</div>

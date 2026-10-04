@@ -1,0 +1,4 @@
+shopify_customer_id,name,email,lifetime_value,risk_score,risk_tier,scored_on
+1001,Customer 1001,customer_1001@example.invalid,420.50,0.9210,high,2011-12-09
+1002,Customer 1002,customer_1002@example.invalid,180.00,0.7810,medium,2011-12-09
+1003,Customer 1003,customer_1003@example.invalid,95.00,0.1200,low,2011-12-09

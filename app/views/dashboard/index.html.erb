@@ -1,0 +1,56 @@
+<% content_for :queue_layout, true %>
+<% content_for :title, "Approval queue" %>
+
+<%# Metrics bar — current month only (no charts per DESIGN.md) %>
+<% if @metrics[:actions_sent] > 0 %>
+  <div class="metrics-bar" style="margin-bottom:28px;">
+    <div class="metric-chip">
+      <div class="metric-chip__label">Sent this month</div>
+      <div class="metric-chip__value"><%= @metrics[:actions_sent] %></div>
+    </div>
+    <div class="metric-chip">
+      <div class="metric-chip__label">Customers retained</div>
+      <div class="metric-chip__value"><%= @metrics[:customers_retained] %></div>
+    </div>
+    <div class="metric-chip">
+      <div class="metric-chip__label">Revenue recovered</div>
+      <div class="metric-chip__value metric-chip__value--accent">
+        €<%= number_with_delimiter(@metrics[:revenue_saved].round(0).to_i) %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @pending_actions.empty? %>
+  <%# ── Empty state ──────────────────────────────────────────────────────────── %>
+  <div class="empty-state">
+    <span class="empty-state__icon">✓</span>
+    <h1 class="empty-state__heading">All caught up</h1>
+    <p class="empty-state__body">
+      No customers are flagged for action right now.
+      ChurnGuard runs daily scoring at 2 am — check back tomorrow.
+    </p>
+
+    <%# Revenue impact calculator (shown on empty state per plan) %>
+    <div class="impact-calc">
+      <div class="impact-calc__eyebrow">Why this matters</div>
+      <div class="impact-calc__headline">Churn costs more than you think</div>
+      <p class="impact-calc__body">
+        Stores at your revenue level typically lose €2,000–€5,000/month to silent churn —
+        customers who simply stop buying without a complaint or cancellation.
+        ChurnGuard typically recovers 30–40% of that with one personalised discount
+        sent at the right moment.
+      </p>
+    </div>
+  </div>
+
+<% else %>
+  <%# ── Pending approval cards ───────────────────────────────────────────────── %>
+
+  <div id="pending-actions">
+    <% @pending_actions.each do |action| %>
+      <%= render "dashboard/action_card", action: action %>
+    <% end %>
+  </div>
+
+<% end %>

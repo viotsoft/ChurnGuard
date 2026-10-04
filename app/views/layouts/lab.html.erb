@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:title) ? yield(:title) + " — ChurnGuard Data Lab" : "ChurnGuard Data Lab" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <%= javascript_importmap_tags %>
+  <style>
+    :root{--bg:#F5F0E8;--surface:#FDFAF4;--surface-2:#F0EAE0;--text:#1A1410;--muted:#8A7E6F;--faint:#B0A594;--accent:#D4500A;--accent-hover:#B8400A;--accent-light:#FAE8DE;--success:#3D7A5C;--success-light:#E0F0E8;--warning:#C28A10;--warning-light:#FDF3D4;--danger:#C9400E;--danger-light:#FAEAE0;--border:#DDD5C8;--border-soft:#EBE4DB}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh}a{color:inherit}.lab-header{height:64px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(245,240,232,.96);position:sticky;top:0;z-index:5}.lab-brand{font-family:'Fraunces',serif;font-size:20px;font-weight:700;text-decoration:none}.lab-brand span{color:var(--accent)}.lab-nav{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}.lab-main{width:min(1040px,calc(100% - 32px));margin:0 auto;padding:40px 0 72px}.lab-main--narrow{max-width:620px}.title{font-family:'Fraunces',serif;font-size:36px;line-height:1.1;margin:0 0 10px;letter-spacing:0}.subtitle{color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 28px;max-width:720px}.panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:20px}.panel-title{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:0 0 8px}.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--faint);margin-bottom:8px}.field{margin-bottom:18px}.field label{display:block;font-size:13px;font-weight:600;margin-bottom:7px}.field input[type=text],.field input[type=email],.field input[type=date],.field input[type=number],.field input[type=file],.field select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);font:14px 'Instrument Sans',sans-serif}.field small{display:block;color:var(--muted);font-size:12px;line-height:1.5;margin-top:6px}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 18px;border-radius:8px;border:1px solid var(--border);font:600 14px 'Instrument Sans',sans-serif;text-decoration:none;cursor:pointer;background:transparent;color:var(--text)}.btn-primary{background:var(--accent);border-color:var(--accent);color:white}.btn-primary:hover{background:var(--accent-hover)}.btn-danger{color:var(--danger);border-color:var(--danger)}.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.flash{padding:12px 16px;border-radius:8px;margin-bottom:18px;font-size:14px}.flash-notice{background:var(--success-light);color:var(--success)}.flash-alert{background:var(--danger-light);color:var(--danger)}.status{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--surface-2);color:var(--muted)}.status-completed,.status-experimental{background:var(--success-light);color:var(--success)}.status-failed{background:var(--danger-light);color:var(--danger)}.status-running,.status-ready{background:var(--accent-light);color:var(--accent)}.status-observational{background:var(--warning-light);color:var(--warning)}.project-list{display:grid;gap:12px;margin:24px 0}.project-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--border-soft);padding:18px;border-radius:8px;text-decoration:none}.project-name{font-family:'Fraunces',serif;font-size:20px;font-weight:600}.meta{font-size:12px;color:var(--muted);margin-top:4px}.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:20px 0}.metric{padding:16px;background:var(--surface);border:1px solid var(--border-soft);border-radius:8px}.metric-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);font-weight:600}.metric-value{font:500 22px 'Geist Mono',monospace;margin-top:7px}.metric-value.accent{color:var(--accent)}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-size:10px;padding:10px;border-bottom:1px solid var(--border)}td{padding:11px 10px;border-bottom:1px solid var(--border-soft)}.mono{font-family:'Geist Mono',monospace;font-variant-numeric:tabular-nums}.accent{color:var(--accent)}.mapping-row{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border-soft)}.preview{max-height:260px;overflow:auto;margin-top:14px}.deciles{display:flex;align-items:end;gap:6px;height:180px;padding-top:20px}.decile{flex:1;display:flex;flex-direction:column;justify-content:end;height:100%;min-width:26px}.decile-bar{background:var(--accent);min-height:2px;border-radius:4px 4px 0 0}.decile-label{text-align:center;font-size:10px;color:var(--faint);padding-top:6px}.callout{padding:14px 16px;border-left:3px solid var(--accent);background:var(--accent-light);font-size:13px;line-height:1.55;margin:16px 0}.errors{background:var(--danger-light);color:var(--danger);padding:12px 16px;border-radius:8px;margin-bottom:18px;font-size:13px}.check{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45}.dev-link{word-break:break-all;font-size:12px}.spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:760px){.lab-header{padding:0 16px}.lab-main{padding-top:28px}.field-grid,.metrics{grid-template-columns:1fr 1fr}.mapping-row{grid-template-columns:1fr;gap:6px}.title{font-size:31px}}
+    @media(max-width:480px){.metrics,.field-grid{grid-template-columns:1fr}.lab-nav__email{display:none}}
+  </style>
+</head>
+<body>
+  <header class="lab-header">
+    <%= link_to lab_root_path, class: "lab-brand" do %>ChurnGuard <span>Data Lab</span><% end %>
+    <nav class="lab-nav">
+      <% if current_sandbox_user %>
+        <%= link_to "Shopify", dashboard_index_path, class: "btn", title: "Open Shopify workspace" %>
+        <span class="lab-nav__email"><%= current_sandbox_user.email %></span>
+        <%= button_to "Sign out", lab_sign_out_path, method: :delete, class: "btn" %>
+      <% else %>
+        <%= link_to "ChurnGuard", root_path, class: "btn" %>
+      <% end %>
+    </nav>
+  </header>
+  <main class="lab-main <%= 'lab-main--narrow' if content_for?(:narrow) %>">
+    <% flash.each do |type, message| %>
+      <% next if type.to_s == "development_magic_link" %>
+      <div class="flash flash-<%= type %>"><%= message %></div>
+    <% end %>
+    <% if flash[:development_magic_link].present? %>
+      <div class="flash flash-notice dev-link">Development link: <%= link_to flash[:development_magic_link], flash[:development_magic_link] %></div>
+    <% end %>
+    <%= yield %>
+  </main>
+</body>
+</html>

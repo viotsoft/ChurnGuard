@@ -1,0 +1,5 @@
+shopify_customer_id,shopify_order_id,amount,currency,status,ordered_at
+1001,ori-5001,220.50,EUR,paid,2011-01-03 10:20:00
+1001,ori-5002,200.00,EUR,paid,2011-03-04 11:00:00
+1002,ori-6001,180.00,EUR,paid,2011-02-10 09:15:00
+1003,ori-7001,95.00,EUR,paid,2011-11-01 12:00:00

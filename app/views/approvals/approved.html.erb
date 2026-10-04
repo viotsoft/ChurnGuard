@@ -1,0 +1,65 @@
+<style>
+  .approved-icon { font-size: 40px; margin-bottom: 16px; display: block; }
+  .approved-heading {
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-size: 28px; font-weight: 600; color: #1A1410;
+    letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px;
+  }
+  .approved-sub {
+    font-size: 15px; color: #8A7E6F; line-height: 1.6; margin-bottom: 24px;
+  }
+  .recovery-box {
+    background: #E0F0E8; border-radius: 8px; padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+  .recovery-label {
+    font-size: 11px; font-weight: 600; color: #3D7A5C;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .recovery-amount {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 26px; font-weight: 700; color: #3D7A5C;
+  }
+  .dashboard-link {
+    display: block; text-align: center;
+    font-size: 14px; font-weight: 600; color: #8A7E6F;
+    text-decoration: none; padding: 10px;
+    border: 1px solid #DDD5C8; border-radius: 8px;
+    transition: color 150ms, border-color 150ms;
+  }
+  .dashboard-link:hover { color: #1A1410; border-color: #B0A594; }
+  .divider { border: none; border-top: 1px solid #EBE4DB; margin: 24px 0; }
+  .klaviyo-note { font-size: 13px; color: #8A7E6F; line-height: 1.5; }
+</style>
+
+<span class="approved-icon">✓</span>
+
+<h1 class="approved-heading">
+  Discount sent to <%= @customer.display_name.split.first %>
+</h1>
+
+<p class="approved-sub">
+  You approved a <strong><%= @action.proposed_discount %> discount</strong>
+  for <strong><%= @customer.display_name %></strong>.
+  Klaviyo will send the campaign within the next few minutes.
+</p>
+
+<% if @action.revenue_at_risk > 0 %>
+  <div class="recovery-box">
+    <p class="recovery-label">Est. revenue at stake</p>
+    <p class="recovery-amount">€<%= @action.revenue_at_risk.round(0).to_i %></p>
+  </div>
+<% end %>
+
+<hr class="divider">
+
+<p class="klaviyo-note">
+  The campaign is now in your Klaviyo queue. You'll see it under
+  <em>Campaigns → Scheduled</em> in your Klaviyo dashboard.
+</p>
+
+<hr class="divider">
+
+<a href="<%= root_path %>" class="dashboard-link">
+  View dashboard →
+</a>
