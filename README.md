@@ -51,7 +51,7 @@ In development, open:
 http://localhost:3000/dev/login?shop=warsawstyle.myshopify.com
 ```
 
-## Investor / Customer Demo
+## Local Demo Data
 
 Prepare a showroom dataset with realistic customers, orders, pending approvals, and completed action history:
 
@@ -71,8 +71,6 @@ Open:
 ```text
 http://localhost:3000/dev/login?shop=warsawstyle.myshopify.com
 ```
-
-See `docs/DEMO_AND_LAUNCH_PLAN.md` for the demo script and completion roadmap.
 
 ## Tests
 
